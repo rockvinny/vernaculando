@@ -151,7 +151,11 @@ async function gerar(){
       .length === 0
   ){
     await carregarCatalogo();
-  }
+
+alert(
+  "Letras encontradas: " +
+  Object.keys(catalogo).join(", ")
+);
 
   const palavra =
     document
