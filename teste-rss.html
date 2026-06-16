@@ -33,8 +33,12 @@ async function carregar(){
 
     const letras = {};
 
-    const matches =
-      texto.match(/#[A-Z]\b/g);
+    const itens =
+  texto.match(/<item>/g);
+
+saida.textContent =
+  "Posts encontrados: " +
+  (itens ? itens.length : 0);
 
     if(matches){
 
