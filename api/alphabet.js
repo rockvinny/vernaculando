@@ -12,11 +12,12 @@ export default async function handler(req, res) {
 
     const text = (item.content_text || "").toUpperCase();
 
-    const tags = text.match(/#([A-Z])\b/g) || [];
+    // pega SOMENTE hashtags de UMA letra (#A, #B, etc)
+    const tags = (text.match(/#[A-Z]/g) || [])
+      .map(t => t.replace("#", ""))
+      .filter(t => /^[A-Z]$/.test(t));
 
-    tags.forEach(tag => {
-
-      const letter = tag.replace("#", "");
+    tags.forEach(letter => {
 
       if (!alphabet[letter]) {
         alphabet[letter] = [];
