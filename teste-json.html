@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste JSON</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  padding:20px;
+}
+
+img{
+  width:200px;
+  height:200px;
+  object-fit:cover;
+  display:block;
+  margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<h1>Teste JSON</h1>
+
+<button onclick="carregar()">
+Carregar JSON
+</button>
+
+<div id="saida"></div>
+
+<script>
+
+async function carregar(){
+
+  const saida =
+    document.getElementById("saida");
+
+  saida.innerHTML = "Carregando...";
+
+  try{
+
+    const resposta =
+      await fetch(
+        "https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json"
+      );
+
+    const dados =
+      await resposta.json();
+
+    saida.innerHTML =
+      "<pre>" +
+      JSON.stringify(
+        dados.items[0],
+        null,
+        2
+      ) +
+      "</pre>";
+
+  }
+
+  catch(erro){
+
+    saida.innerHTML =
+      "Erro: " + erro.message;
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
