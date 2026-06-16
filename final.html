@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vernaculando</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #output {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .letter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .letter img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .label {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Vernaculando</h1>
+
+<input id="input" placeholder="Digite uma palavra..." />
+
+<div id="output"></div>
+
+<script>
+const FEED_URL = "https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
+
+let alphabetMap = {};
+
+// 1. Carrega o feed e monta o mapa A-Z
+fetch(FEED_URL)
+  .then(res => res.json())
+  .then(data => {
+
+    data.items.forEach(item => {
+      const text = (item.content_text || "").toUpperCase();
+
+      // procura tags #A #B #C etc
+      const tags = text.match(/#([A-Z])/g);
+
+      if (tags) {
+        tags.forEach(tag => {
+          const letter = tag.replace("#", "");
+          
+          // mantém a primeira ocorrência (pode mudar para última se quiser)
+          if (!alphabetMap[letter]) {
+            alphabetMap[letter] = item.image;
+          }
+        });
+      }
+    });
+
+    console.log("Mapa carregado:", alphabetMap);
+  });
+
+// 2. Gera palavra visual
+function renderWord(word) {
+  const container = document.getElementById("output");
+  container.innerHTML = "";
+
+  word = word.toUpperCase();
+
+  for (let char of word) {
+    const img = alphabetMap[char];
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "letter";
+
+    if (img) {
+      wrapper.innerHTML = `
+        <img src="${img}" />
+        <div class="label">${char}</div>
+      `;
+    } else {
+      wrapper.innerHTML = `
+        <div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;background:#333;border-radius:8px;">
+          ${char}
+        </div>
+        <div class="label">${char}</div>
+      `;
+    }
+
+    container.appendChild(wrapper);
+  }
+}
+
+// 3. Input ao vivo
+document.getElementById("input").addEventListener("input", (e) => {
+  renderWord(e.target.value);
+});
+</script>
+
+</body>
+</html>
