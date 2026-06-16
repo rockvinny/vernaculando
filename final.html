@@ -81,47 +81,27 @@ button{
 
 <script>
 
-const FEED_URL =
-"https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
+// ================================
+// ALFABETO DINÂMICO (VERCEL API)
+// ================================
 
-// dicionário final A-Z vindo do Instagram
 let letras = {};
 
-// carrega feed e monta alfabeto
-fetch(FEED_URL)
+// carrega o alfabeto do backend
+fetch("/api/alphabet")
   .then(r => r.json())
   .then(data => {
-
-    data.items.forEach(item => {
-
-      const text =
-        (item.content_text || "").toUpperCase();
-
-      const tags =
-        text.match(/#([A-Z])/g);
-
-      if (tags) {
-
-        tags.forEach(tag => {
-
-          const letra =
-            tag.replace("#", "");
-
-          if (!letras[letra]) {
-            letras[letra] = item.image;
-          }
-
-        });
-
-      }
-
-    });
-
+    letras = data;
     console.log("Alfabeto carregado:", letras);
-
+  })
+  .catch(err => {
+    console.error("Erro ao carregar alfabeto:", err);
   });
 
-// gera palavra visual
+// ================================
+// FUNÇÃO PRINCIPAL
+// ================================
+
 function compor(){
 
   const palavra =
@@ -136,9 +116,13 @@ function compor(){
 
   for(const letra of palavra){
 
-    const imgUrl = letras[letra];
+    const imagens = letras[letra];
 
-    if(imgUrl){
+    if(imagens && imagens.length > 0){
+
+      // escolhe imagem aleatória da letra
+      const imgUrl =
+        imagens[Math.floor(Math.random() * imagens.length)];
 
       const img =
         document.createElement("img");
@@ -149,7 +133,7 @@ function compor(){
 
     } else {
 
-      // fallback visual (mantém alinhamento)
+      // fallback visual (mantém layout intacto)
       const vazio =
         document.createElement("div");
 
