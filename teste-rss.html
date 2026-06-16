@@ -1,18 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Teste RSS Vernaculando</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste RSS</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  padding:20px;
+}
+
+button{
+  padding:10px 20px;
+}
+
+img{
+  width:200px;
+  height:200px;
+  object-fit:cover;
+  border:1px solid #ccc;
+  margin-top:20px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Letras encontradas</h1>
+<h1>Teste RSS Vernaculando</h1>
 
 <button onclick="carregar()">
 Carregar RSS
 </button>
 
-<pre id="saida"></pre>
+<div id="saida"></div>
 
 <script>
 
@@ -21,34 +42,16 @@ async function carregar(){
   const saida =
     document.getElementById("saida");
 
-  const rss =
-    await fetch(
-      "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml"
-    );
+  saida.innerHTML = "Carregando...";
 
-  const texto =
-    await rss.text();
+  try{
 
-  const match =
-    texto.match(/https:\/\/ipxy\.io\/img\/[^"]+/);
+    const rss =
+      await fetch(
+        "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml"
+      );
 
-  saida.textContent =
-    match
-      ? match[0]
-      : "Nenhuma URL IPXY encontrada";
+    const texto =
+      await rss.text();
 
-}
-
-  catch(e){
-
-    saida.textContent =
-      "Erro: " + e.message;
-
-  }
-
-}
-
-</script>
-
-</body>
-</html>
+    const primeiroItem
