@@ -11,8 +11,8 @@
 body{
   margin:0;
   padding:40px 20px;
-  font-family:Arial,sans-serif;
   background:#fff;
+  font-family:Arial,sans-serif;
   text-align:center;
 }
 
@@ -37,7 +37,7 @@ button{
   background:#000;
   color:#fff;
   font-size:13px;
-  font-weight:600;
+  font-weight:bold;
   cursor:pointer;
 }
 
@@ -53,6 +53,11 @@ button{
   height:160px;
   object-fit:cover;
   flex-shrink:0;
+}
+
+.msg{
+  margin-top:30px;
+  font-size:14px;
 }
 
 </style>
@@ -73,89 +78,71 @@ placeholder="Digite uma palavra"
 GERAR!
 </button>
 
-<div
-class="resultado"
-id="resultado">
-</div>
+<div id="resultado" class="resultado"></div>
+
+<div id="msg" class="msg"></div>
 
 <script>
 
 const RSS =
 "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml";
 
-let catalogo = {};
+let catalogo = null;
 
 async function carregarCatalogo(){
 
-  const rss =
+  const resposta =
     await fetch(RSS);
 
-  const texto =
-    await rss.text();
-
-  const parser =
-    new DOMParser();
-
   const xml =
-    parser.parseFromString(
-      texto,
-      "text/xml"
-    );
+    await resposta.text();
 
   const itens =
-    xml.querySelectorAll("item");
+    xml.split("<item>");
 
-  catalogo = {};
+  const letras = {};
 
   itens.forEach(item => {
 
-    const titulo =
-      item.querySelector("title")
-        ?.textContent || "";
-
-    const media =
-      item.querySelector("media\\:content");
+    const hashtag =
+      item.match(/#([A-Z])\b/);
 
     const imagem =
-      media?.getAttribute("url");
+      item.match(
+        /<media:content[^>]*url="([^"]+)"/
+      );
 
-    const tags =
-      titulo.match(/#[A-Z]\b/g);
-
-    if(!tags || !imagem)
+    if(!hashtag || !imagem)
       return;
 
-    tags.forEach(tag => {
+    const letra =
+      hashtag[1];
 
-      const letra =
-        tag.replace("#","");
+    const url =
+      imagem[1];
 
-      if(!catalogo[letra])
-        catalogo[letra] = [];
+    if(!letras[letra])
+      letras[letra] = [];
 
-      catalogo[letra]
-        .push(imagem);
-
-    });
+    letras[letra].push(url);
 
   });
+
+  catalogo = letras;
 
 }
 
 async function gerar(){
 
-  alert("Botão funcionando");
+  document
+    .getElementById("msg")
+    .innerHTML = "";
 
-  if(
-    Object.keys(catalogo)
-      .length === 0
-  ){
+  if(!catalogo){
+
     await carregarCatalogo();
 
-alert(
-  "Letras encontradas: " +
-  Object.keys(catalogo).join(", ")
-);
+  }
 
   const palavra =
     document
@@ -169,30 +156,41 @@ alert(
 
   resultado.innerHTML = "";
 
+  let encontrou = false;
+
   for(const letra of palavra){
 
     if(!catalogo[letra])
       continue;
 
-    const imagens =
+    encontrou = true;
+
+    const lista =
       catalogo[letra];
 
     const url =
-      imagens[
+      lista[
         Math.floor(
           Math.random() *
-          imagens.length
+          lista.length
         )
       ];
 
     const img =
-      document
-        .createElement("img");
+      document.createElement("img");
 
     img.src = url;
 
-    resultado
-      .appendChild(img);
+    resultado.appendChild(img);
+
+  }
+
+  if(!encontrou){
+
+    document
+      .getElementById("msg")
+      .innerHTML =
+      "Nenhuma letra encontrada no feed atual.";
 
   }
 
