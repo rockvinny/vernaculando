@@ -21,58 +21,23 @@ async function carregar(){
   const saida =
     document.getElementById("saida");
 
-  try{
+  const rss =
+    await fetch(
+      "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml"
+    );
 
-    const rss =
-      await fetch(
-        "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml"
-      );
+  const texto =
+    await rss.text();
 
-    const texto =
-      await rss.text();
+  const match =
+    texto.match(/https:\/\/ipxy\.io\/img\/[^"]+/);
 
-    const parser =
-      new DOMParser();
+  saida.textContent =
+    match
+      ? match[0]
+      : "Nenhuma URL IPXY encontrada";
 
-    const xml =
-      parser.parseFromString(
-        texto,
-        "text/xml"
-      );
-
-    const itens =
-      xml.querySelectorAll("item");
-
-    let resultado = "";
-
-    itens.forEach(item => {
-
-      const titulo =
-        item.querySelector("title")
-          ?.textContent || "";
-
-      const media =
-        item.querySelector("media\\:content");
-
-      const imagem =
-        media?.getAttribute("url") ||
-        "SEM IMAGEM";
-
-      resultado +=
-        "TAGS: " + titulo + "\n\n";
-
-      resultado +=
-        "IMAGEM:\n" + imagem + "\n\n";
-
-      resultado +=
-        "----------------------\n\n";
-
-    });
-
-    saida.textContent =
-      resultado;
-
-  }
+}
 
   catch(e){
 
