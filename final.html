@@ -1,131 +1,175 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Vernaculando</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #111;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vernaculando</title>
 
-    h1 {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
+<style>
+body{
+  margin:0;
+  background:#fff;
+  color:#000;
+  font-family:Arial,sans-serif;
+}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: none;
-    }
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+  text-align:center;
+}
 
-    #output {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+h1{
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.08em;
+  margin-bottom:25px;
+}
 
-    .letter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+input{
+  width:100%;
+  max-width:500px;
+  padding:12px;
+  font-size:18px;
+  text-align:center;
+}
 
-    .letter img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+button{
+  margin-top:12px;
+  padding:8px 18px;
+  border:1px solid #000;
+  background:#000;
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.05em;
+  cursor:pointer;
+}
 
-    .label {
-      font-size: 12px;
-      opacity: 0.6;
-      margin-top: 4px;
-    }
-  </style>
+.resultado{
+  margin-top:30px;
+  display:flex;
+  overflow-x:auto;
+}
+
+.resultado img{
+  width:160px;
+  height:160px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+</style>
+
 </head>
+
 <body>
 
-<h1>Vernaculando</h1>
+<div class="container">
 
-<input id="input" placeholder="Digite uma palavra..." />
+<h1>gerador @vernaculando</h1>
 
-<div id="output"></div>
+<input id="palavra" placeholder="Digite uma palavra">
+
+<br>
+
+<button onclick="compor()">GERAR!</button>
+
+<div class="resultado" id="resultado"></div>
+
+</div>
 
 <script>
-const FEED_URL = "https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
 
-let alphabetMap = {};
+const FEED_URL =
+"https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
 
-// 1. Carrega o feed e monta o mapa A-Z
+// dicionário final A-Z vindo do Instagram
+let letras = {};
+
+// carrega feed e monta alfabeto
 fetch(FEED_URL)
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
 
     data.items.forEach(item => {
-      const text = (item.content_text || "").toUpperCase();
 
-      // procura tags #A #B #C etc
-      const tags = text.match(/#([A-Z])/g);
+      const text =
+        (item.content_text || "").toUpperCase();
+
+      const tags =
+        text.match(/#([A-Z])/g);
 
       if (tags) {
+
         tags.forEach(tag => {
-          const letter = tag.replace("#", "");
-          
-          // mantém a primeira ocorrência (pode mudar para última se quiser)
-          if (!alphabetMap[letter]) {
-            alphabetMap[letter] = item.image;
+
+          const letra =
+            tag.replace("#", "");
+
+          if (!letras[letra]) {
+            letras[letra] = item.image;
           }
+
         });
+
       }
+
     });
 
-    console.log("Mapa carregado:", alphabetMap);
+    console.log("Alfabeto carregado:", letras);
+
   });
 
-// 2. Gera palavra visual
-function renderWord(word) {
-  const container = document.getElementById("output");
-  container.innerHTML = "";
+// gera palavra visual
+function compor(){
 
-  word = word.toUpperCase();
+  const palavra =
+    document.getElementById("palavra")
+    .value
+    .toUpperCase();
 
-  for (let char of word) {
-    const img = alphabetMap[char];
+  const resultado =
+    document.getElementById("resultado");
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "letter";
+  resultado.innerHTML = "";
 
-    if (img) {
-      wrapper.innerHTML = `
-        <img src="${img}" />
-        <div class="label">${char}</div>
-      `;
+  for(const letra of palavra){
+
+    const imgUrl = letras[letra];
+
+    if(imgUrl){
+
+      const img =
+        document.createElement("img");
+
+      img.src = imgUrl;
+
+      resultado.appendChild(img);
+
     } else {
-      wrapper.innerHTML = `
-        <div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;background:#333;border-radius:8px;">
-          ${char}
-        </div>
-        <div class="label">${char}</div>
-      `;
+
+      // fallback visual (mantém alinhamento)
+      const vazio =
+        document.createElement("div");
+
+      vazio.style.width = "160px";
+      vazio.style.height = "160px";
+      vazio.style.display = "flex";
+      vazio.style.alignItems = "center";
+      vazio.style.justifyContent = "center";
+      vazio.style.border = "1px solid #000";
+
+      vazio.innerText = letra;
+
+      resultado.appendChild(vazio);
+
     }
 
-    container.appendChild(wrapper);
   }
+
 }
 
-// 3. Input ao vivo
-document.getElementById("input").addEventListener("input", (e) => {
-  renderWord(e.target.value);
-});
 </script>
 
 </body>
