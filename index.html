@@ -1,15 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vernaculando</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vernaculando</title>
+
+<style>
+
+body{
+  margin:0;
+  background:#ffffff;
+  color:#000;
+  font-family:Arial, sans-serif;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+h1{
+  font-size:2rem;
+  letter-spacing:.15em;
+  margin-bottom:30px;
+}
+
+input{
+  width:100%;
+  max-width:500px;
+  padding:12px;
+  font-size:1rem;
+  border:1px solid #000;
+}
+
+button{
+  margin-top:12px;
+  padding:12px 24px;
+  border:1px solid #000;
+  background:#fff;
+  cursor:pointer;
+}
+
+.resultado{
+  margin-top:40px;
+  display:flex;
+  overflow-x:auto;
+}
+
+.letra{
+  width:120px;
+  height:120px;
+  background:#ddd;
+  flex-shrink:0;
+}
+
+</style>
 </head>
+
 <body>
 
-  <h1>VERNACULANDO</h1>
+<div class="container">
 
-  <p>Meu primeiro teste.</p>
+<h1>VERNACULANDO</h1>
+
+<p>Digite uma palavra</p>
+
+<input
+type="text"
+placeholder="SAUDADE"
+>
+
+<br>
+
+<button>
+COMPOR
+</button>
+
+<div class="resultado">
+
+<div class="letra"></div>
+<div class="letra"></div>
+<div class="letra"></div>
+<div class="letra"></div>
+<div class="letra"></div>
+
+</div>
+
+</div>
 
 </body>
 </html>
