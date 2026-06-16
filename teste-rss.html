@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Teste RSS Vernaculando</title>
+</head>
+<body>
+
+<h1>Letras encontradas</h1>
+
+<button onclick="carregar()">
+Carregar RSS
+</button>
+
+<pre id="saida"></pre>
+
+<script>
+
+async function carregar(){
+
+  const saida =
+    document.getElementById("saida");
+
+  try{
+
+    const rss =
+      await fetch(
+        "https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml"
+      );
+
+    const texto =
+      await rss.text();
+
+    const letras = {};
+
+    const matches =
+      texto.match(/#[A-Z]\b/g);
+
+    if(matches){
+
+      matches.forEach(tag => {
+
+        const letra =
+          tag.replace("#","");
+
+        letras[letra] =
+          (letras[letra] || 0) + 1;
+
+      });
+
+    }
+
+    saida.textContent =
+      JSON.stringify(
+        letras,
+        null,
+        2
+      );
+
+  }
+
+  catch(e){
+
+    saida.textContent =
+      "Erro: " + e.message;
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
