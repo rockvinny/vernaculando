@@ -6,12 +6,11 @@
 <title>Vernaculando</title>
 
 <style>
-
 body{
   margin:0;
-  background:#ffffff;
+  background:#fff;
   color:#000;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
 }
 
 .container{
@@ -21,73 +20,99 @@ body{
 }
 
 h1{
-  font-size:2rem;
   letter-spacing:.15em;
-  margin-bottom:30px;
 }
 
 input{
   width:100%;
   max-width:500px;
   padding:12px;
-  font-size:1rem;
-  border:1px solid #000;
+  font-size:18px;
 }
 
 button{
-  margin-top:12px;
+  margin-top:10px;
   padding:12px 24px;
-  border:1px solid #000;
-  background:#fff;
-  cursor:pointer;
 }
 
 .resultado{
-  margin-top:40px;
+  margin-top:30px;
   display:flex;
   overflow-x:auto;
 }
 
-.letra{
+.resultado img{
   width:120px;
   height:120px;
-  background:#ddd;
+  object-fit:cover;
   flex-shrink:0;
 }
-
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="container">
 
 <h1>VERNACULANDO</h1>
 
-<p>Digite uma palavra</p>
-
 <input
-type="text"
-placeholder="SAUDADE"
+id="palavra"
+placeholder="Digite SHE"
 >
 
 <br>
 
-<button>
+<button onclick="compor()">
 COMPOR
 </button>
 
-<div class="resultado">
-
-<div class="letra"></div>
-<div class="letra"></div>
-<div class="letra"></div>
-<div class="letra"></div>
-<div class="letra"></div>
+<div class="resultado" id="resultado"></div>
 
 </div>
 
-</div>
+<script>
+
+const letras = {
+
+"S":"images/Screenshot_20260615-231047_Instagram~2.png",
+
+"E":"images/Screenshot_20260615-231057_Instagram~2.png",
+
+"H":"images/Screenshot_20260615-231103_Instagram~2.png"
+
+};
+
+function compor(){
+
+const palavra =
+document.getElementById("palavra")
+.value
+.toUpperCase();
+
+const resultado =
+document.getElementById("resultado");
+
+resultado.innerHTML = "";
+
+for(const letra of palavra){
+
+if(letras[letra]){
+
+const img =
+document.createElement("img");
+
+img.src = letras[letra];
+
+resultado.appendChild(img);
+
+}
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
