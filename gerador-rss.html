@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>gerador @vernaculando</title>
+
+<style>
+
+body{
+  margin:0;
+  padding:40px 20px;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  text-align:center;
+}
+
+h1{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:25px;
+}
+
+input{
+  width:100%;
+  max-width:500px;
+  padding:12px;
+  font-size:18px;
+  text-align:center;
+}
+
+button{
+  margin-top:12px;
+  padding:8px 18px;
+  border:1px solid #000;
+  background:#000;
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.resultado{
+  margin-top:40px;
+  display:flex;
+  justify-content:center;
+  overflow-x:auto;
+}
+
+.resultado img{
+  width:160px;
+  height:160px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>gerador @vernaculando</h1>
+
+<input
+id="palavra"
+placeholder="Digite uma palavra"
+>
+
+<br>
+
+<button onclick="gerar()">
+GERAR!
+</button>
+
+<div
+class="resultado"
+id="resultado">
+</div>
+
+<script>
+
+const RSS =
+"https://rss.app/feeds/4aUmbnZaAmP38RRZ.xml";
+
+let catalogo = {};
+
+async function carregarCatalogo(){
+
+  const rss =
+    await fetch(RSS);
+
+  const texto =
+    await rss.text();
+
+  const parser =
+    new DOMParser();
+
+  const xml =
+    parser.parseFromString(
+      texto,
+      "text/xml"
+    );
+
+  const itens =
+    xml.querySelectorAll("item");
+
+  catalogo = {};
+
+  itens.forEach(item => {
+
+    const titulo =
+      item.querySelector("title")
+        ?.textContent || "";
+
+    const media =
+      item.querySelector("media\\:content");
+
+    const imagem =
+      media?.getAttribute("url");
+
+    const tags =
+      titulo.match(/#[A-Z]\b/g);
+
+    if(!tags || !imagem)
+      return;
+
+    tags.forEach(tag => {
+
+      const letra =
+        tag.replace("#","");
+
+      if(!catalogo[letra])
+        catalogo[letra] = [];
+
+      catalogo[letra]
+        .push(imagem);
+
+    });
+
+  });
+
+}
+
+async function gerar(){
+
+  if(
+    Object.keys(catalogo)
+      .length === 0
+  ){
+    await carregarCatalogo();
+  }
+
+  const palavra =
+    document
+      .getElementById("palavra")
+      .value
+      .toUpperCase();
+
+  const resultado =
+    document
+      .getElementById("resultado");
+
+  resultado.innerHTML = "";
+
+  for(const letra of palavra){
+
+    if(!catalogo[letra])
+      continue;
+
+    const imagens =
+      catalogo[letra];
+
+    const url =
+      imagens[
+        Math.floor(
+          Math.random() *
+          imagens.length
+        )
+      ];
+
+    const img =
+      document
+        .createElement("img");
+
+    img.src = url;
+
+    resultado
+      .appendChild(img);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
