@@ -50,7 +50,9 @@ button{
 .resultado{
   margin-top:30px;
   display:flex;
-  overflow-x:auto;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
 }
 
 .resultado img{
@@ -58,6 +60,12 @@ button{
   height:160px;
   object-fit:cover;
   flex-shrink:0;
+}
+
+.erro{
+  color:#999;
+  font-size:14px;
+  margin-top:20px;
 }
 </style>
 
@@ -71,6 +79,7 @@ button{
 <input
 id="palavra"
 placeholder="Digite uma palavra"
+maxlength="20"
 >
 
 <br>
@@ -80,49 +89,95 @@ GERAR!
 </button>
 
 <div class="resultado" id="resultado"></div>
+<div class="erro" id="erro"></div>
 
 </div>
 
 <script>
 
-const letras = {
+// ========== CONFIGURAÇÃO ==========
+const RSS_URL = "https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
 
-"S":"imagens/Screenshot_20260615-231047_Instagram~2.png",
+// ========== CARREGA TUDO ==========
+let letrasCompletas = {};
 
-"E":"imagens/Screenshot_20260615-231057_Instagram~2.png",
-
-"H":"imagens/Screenshot_20260615-231103_Instagram~2.png"
-
-};
-
-function compor(){
-
-const palavra =
-document.getElementById("palavra")
-.value
-.toUpperCase();
-
-const resultado =
-document.getElementById("resultado");
-
-resultado.innerHTML = "";
-
-for(const letra of palavra){
-
-if(letras[letra]){
-
-const img =
-document.createElement("img");
-
-img.src = letras[letra];
-
-resultado.appendChild(img);
-
+async function carregarLetras() {
+  // 1. Carrega letras.json (base histórica)
+  const respLocal = await fetch("letras.json");
+  const dadosLocais = await respLocal.json();
+  
+  // 2. Carrega RSS (posts novos)
+  try {
+    const respRSS = await fetch(RSS_URL);
+    const dadosRSS = await respRSS.json();
+    
+    // Extrai hashtags do RSS
+    for (const item of dadosRSS.items || []) {
+      const legenda = (item.content_text || item.title || "").toUpperCase();
+      const matchLetra = legenda.match(/#([A-Z0-9])\b/g);
+      
+      if (matchLetra) {
+        for (const tag of matchLetra) {
+          const letra = tag.replace("#", "");
+          const imagem = item.image || item.enclosure?.url || "";
+          
+          if (imagem && letra.length === 1) {
+            if (!dadosLocais[letra]) dadosLocais[letra] = [];
+            if (!dadosLocais[letra].includes(imagem)) {
+              dadosLocais[letra].push(imagem);
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.log("RSS não carregado, usando só base local");
+  }
+  
+  letrasCompletas = dadosLocais;
+  console.log("Letras carregadas:", Object.keys(letrasCompletas).length);
 }
 
+// ========== FUNÇÃO PRINCIPAL ==========
+function compor() {
+  const palavra = document.getElementById("palavra").value.toUpperCase();
+  const resultado = document.getElementById("resultado");
+  const erro = document.getElementById("erro");
+  
+  resultado.innerHTML = "";
+  erro.innerHTML = "";
+  
+  if (!palavra) {
+    erro.innerHTML = "Digite uma palavra!";
+    return;
+  }
+  
+  for (const letra of palavra) {
+    const opcoes = letrasCompletas[letra];
+    
+    if (opcoes && opcoes.length > 0) {
+      const img = document.createElement("img");
+      // Escolhe aleatoriamente
+      img.src = opcoes[Math.floor(Math.random() * opcoes.length)];
+      img.alt = letra;
+      img.title = `Letra ${letra}`;
+      resultado.appendChild(img);
+    } else {
+      const span = document.createElement("span");
+      span.style.cssText = "width:160px;height:160px;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:40px;color:#ccc;";
+      span.innerHTML = letra;
+      resultado.appendChild(span);
+    }
+  }
 }
 
-}
+// ========== INICIA ==========
+carregarLetras();
+
+// Permite apertar Enter para gerar
+document.getElementById("palavra").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") compor();
+});
 
 </script>
 
