@@ -31,12 +31,46 @@ async function carregar(){
     const texto =
       await rss.text();
 
+    const parser =
+      new DOMParser();
+
+    const xml =
+      parser.parseFromString(
+        texto,
+        "text/xml"
+      );
+
     const itens =
-      texto.match(/<item>/g);
+      xml.querySelectorAll("item");
+
+    let resultado = "";
+
+    itens.forEach(item => {
+
+      const titulo =
+        item.querySelector("title")
+          ?.textContent || "";
+
+      const media =
+        item.querySelector("media\\:content");
+
+      const imagem =
+        media?.getAttribute("url") ||
+        "SEM IMAGEM";
+
+      resultado +=
+        "TAGS: " + titulo + "\n\n";
+
+      resultado +=
+        "IMAGEM:\n" + imagem + "\n\n";
+
+      resultado +=
+        "----------------------\n\n";
+
+    });
 
     saida.textContent =
-      "Posts encontrados: " +
-      (itens ? itens.length : 0);
+      resultado;
 
   }
 
