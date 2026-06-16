@@ -31,35 +31,12 @@ async function carregar(){
     const texto =
       await rss.text();
 
-    const letras = {};
-
     const itens =
-  texto.match(/<item>/g);
-
-saida.textContent =
-  "Posts encontrados: " +
-  (itens ? itens.length : 0);
-
-    if(matches){
-
-      matches.forEach(tag => {
-
-        const letra =
-          tag.replace("#","");
-
-        letras[letra] =
-          (letras[letra] || 0) + 1;
-
-      });
-
-    }
+      texto.match(/<item>/g);
 
     saida.textContent =
-      JSON.stringify(
-        letras,
-        null,
-        2
-      );
+      "Posts encontrados: " +
+      (itens ? itens.length : 0);
 
   }
 
