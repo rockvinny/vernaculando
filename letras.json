@@ -1,24 +1,17 @@
 {
-  "g": [
-    "public/imagens/17870174056123886.jpg",
-    "public/imagens/17846960548064837.jpg"
-  ],
-  "8": [
-    "public/imagens/17845725007179128.jpg"
-  ],
-  "q": [
-    "public/imagens/18108735151425556.webp"
-  ],
-  "s": [
-    "public/imagens/18017648596814934.webp"
-  ],
-  "p": [
-    "public/imagens/17853101857000769.jpg"
-  ],
-  "1": [
-    "public/imagens/17869640122199358.jpg"
-  ],
-  "h": [
-    "public/imagens/17868571369079602.jpg"
-  ]
+  "5": ["public/imagens/5-1.jpg"],
+  "8": ["public/imagens/8-1.jpg"],
+  "a": ["public/imagens/a-1.jpg", "public/imagens/a-2.jpg", "public/imagens/a-3.jpg", "public/imagens/a-4.jpg"],
+  "c": ["public/imagens/c-1.jpg", "public/imagens/c-2.jpg", "public/imagens/c-3.jpg"],
+  "e": ["public/imagens/e-1.jpg"],
+  "g": ["public/imagens/g-1.jpg", "public/imagens/g-2.jpg"],
+  "h": ["public/imagens/h-1.jpg"],
+  "j": ["public/imagens/j-1.jpg"],
+  "m": ["public/imagens/m-1.jpg"],
+  "o": ["public/imagens/o-1.jpg"],
+  "q": ["public/imagens/q-1.jpg"],
+  "s": ["public/imagens/s-1.jpg", "public/imagens/s-2.jpg", "public/imagens/s-3.jpg", "public/imagens/s-4.jpg"],
+  "t": ["public/imagens/t-1.jpg"],
+  "x": ["public/imagens/x-1.jpg", "public/imagens/x-2.jpg"],
+  "z": ["public/imagens/z-1.jpg"]
 }
