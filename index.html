@@ -114,11 +114,13 @@ async function carregarLetras() {
     // Extrai hashtags do RSS
     for (const item of dadosRSS.items || []) {
       const legenda = (item.content_text || item.title || "").toUpperCase();
-      const matchLetra = legenda.match(/#[A-Z0-9](?![A-Z0-9])/gi);
-      
-      if (matchLetra) {
-        for (const tag of matchLetra) {
-          const letra = tag.replace("#", "");
+      const matchLetra = legenda.match(/#[A-Z0-9]\b/gi);
+
+if (matchLetra) {
+  for (const tag of matchLetra) {
+    const letra = tag.replace("#", "").toUpperCase();
+    // Pula se tiver mais de 1 caractere
+    if (letra.length !== 1) continue;
           const imagem = item.image || item.enclosure?.url || "";
           
           if (imagem && letra.length === 1) {
