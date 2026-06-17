@@ -70,7 +70,7 @@ button{
 
 .insta-link{
   display:inline-block;
-  margin-bottom:20px;
+  margin-top:20px;
   font-size:13px;
   font-weight:400;
   color:#000;
@@ -105,11 +105,11 @@ GERAR!
 
 <div class="resultado" id="resultado"></div>
 
-<div style="text-align:center; margin-top:20px;">
+<div class="erro" id="erro"></div>
+
+<div id="link-instagram" style="text-align:center; display:none;">
   <a href="https://instagram.com/vernaculando" target="_blank" class="insta-link">instagram @vernaculando</a>
 </div>
-  
-<div class="erro" id="erro"></div>
 
 </div>
 
@@ -136,11 +136,11 @@ async function carregarLetras() {
       const legenda = (item.content_text || item.title || "").toUpperCase();
       const matchLetra = legenda.match(/#[A-Z0-9]\b/gi);
 
-if (matchLetra) {
-  for (const tag of matchLetra) {
-    const letra = tag.replace("#", "").toUpperCase();
-    // Pula se tiver mais de 1 caractere
-    if (letra.length !== 1) continue;
+      if (matchLetra) {
+        for (const tag of matchLetra) {
+          const letra = tag.replace("#", "").toUpperCase();
+          // Pula se tiver mais de 1 caractere
+          if (letra.length !== 1) continue;
           const imagem = item.image || item.enclosure?.url || "";
           
           if (imagem && letra.length === 1) {
@@ -171,6 +171,7 @@ function compor() {
   
   if (!palavra) {
     erro.innerHTML = "Digite uma palavra!";
+    document.getElementById("link-instagram").style.display = "none";
     return;
   }
   
@@ -191,6 +192,9 @@ function compor() {
       resultado.appendChild(span);
     }
   }
+  
+  // Mostra o link do Instagram
+  document.getElementById("link-instagram").style.display = "block";
 }
 
 // ========== INICIA ==========
