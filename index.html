@@ -103,7 +103,7 @@ let letrasCompletas = {};
 
 async function carregarLetras() {
   // 1. Carrega letras.json (base histórica)
-  const respLocal = await fetch("letras.json");
+  const respLocal = await fetch("/letras.json");
   const dadosLocais = await respLocal.json();
   
   // 2. Carrega RSS (posts novos)
