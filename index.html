@@ -153,7 +153,7 @@ function compor() {
   }
   
   for (const letra of palavra) {
-    const opcoes = letrasCompletas[letra];
+    const opcoes = letrasCompletas[letra] || letrasCompletas[letra.toLowerCase()] || [];
     
     if (opcoes && opcoes.length > 0) {
       const img = document.createElement("img");
