@@ -114,7 +114,7 @@ async function carregarLetras() {
     // Extrai hashtags do RSS
     for (const item of dadosRSS.items || []) {
       const legenda = (item.content_text || item.title || "").toUpperCase();
-      const matchLetra = legenda.match(/#([A-Z0-9])\b/g);
+      const matchLetra = legenda.match(/#[A-Z0-9]\b/g);
       
       if (matchLetra) {
         for (const tag of matchLetra) {
