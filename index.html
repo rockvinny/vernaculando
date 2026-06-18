@@ -50,14 +50,15 @@ button{
 .resultado{
   margin-top:30px;
   display:flex;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   justify-content:center;
+  overflow-x:auto;
   gap:0px;
 }
 
 .resultado img{
-  width:160px;
-  height:160px;
+  width:clamp(80px, 20vw, 160px);
+  height:clamp(80px, 20vw, 160px);
   object-fit:cover;
   flex-shrink:0;
 }
