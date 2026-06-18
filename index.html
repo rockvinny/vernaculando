@@ -179,9 +179,26 @@ function compor() {
     document.getElementById("link-instagram").style.display = "none";
     return;
   }
+
+  // Mapa de acentos e símbolos
+const mapa = {
+  "Á": "a_acute", "À": "a_acute", "Â": "a_acute", "Ã": "a_tilde",
+  "É": "e_acute", "Ê": "e_acute",
+  "Í": "i_acute",
+  "Ó": "o_acute", "Ô": "o_acute", "Õ": "o_tilde",
+  "Ú": "u_acute",
+  "Ç": "c_cedilha",
+  "@": "arroba",
+  "&": "ampersand"
+};
+
+const palavra = document.getElementById("palavra").value
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
+  .toUpperCase();
   
   for (const letra of palavra) {
-    const opcoes = letrasCompletas[letra] || letrasCompletas[letra.toLowerCase()] || [];
+    const chave = mapa[letra] || letra;
+    const opcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || [];
     
     if (opcoes && opcoes.length > 0) {
       const img = document.createElement("img");
