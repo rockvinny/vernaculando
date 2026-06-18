@@ -77,5 +77,10 @@
   "z": [
     "public/imagens/z-1.jpg",
     "public/imagens/z-2.jpg"
-  ]
+  ],
+  "a_acute": ["public/imagens/a_acute-1.jpg"],
+  "a_tilde": ["public/imagens/a_tilde-1.jpg"],
+  "o_acute": ["public/imagens/o_acute-1.jpg"],
+  "ampersand": ["public/imagens/ampersand-1.jpg"],
+  "arroba": ["public/imagens/arroba-1.jpg"]
 }
