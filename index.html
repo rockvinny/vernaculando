@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vernaculando</title>
+<title>gerador.vernaculando</title>
 
 <style>
 body{
@@ -89,18 +89,18 @@ button{
 
 <div class="container">
 
-<h1>gerador @vernaculando</h1>
+<h1>gerador.vernaculando</h1>
 
 <input
 id="palavra"
-placeholder="Digite uma palavra"
+placeholder="palavra | palabra | word"
 maxlength="20"
 >
 
 <br>
 
 <button onclick="compor()">
-GERAR!
+vernacular!
 </button>
 
 <div class="resultado" id="resultado"></div>
@@ -194,7 +194,8 @@ function compor() {
   }
   
   // Mostra o link do Instagram
-  document.getElementById("link-instagram").style.display = "block";
+  var link = document.getElementById("link-instagram");
+  if (link) link.style.display = "block";
 }
 
 // ========== INICIA ==========
