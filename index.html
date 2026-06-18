@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>gerador.vernaculando</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
 
 <style>
@@ -23,7 +22,7 @@ body{
 }
 
 h1{
-  font-size:15px;
+  font-size:16px;
   font-weight:700;
   letter-spacing:.08em;
   margin-bottom:10px;
@@ -33,9 +32,9 @@ input{
   width:100%;
   max-width:280px;
   padding:10px;
-  font-size:15px;
+  font-size:16px;
   text-align:center;
-  border:1px solid #000;
+  border:1px solid #ccc;
   outline:none;
 }
 
@@ -94,11 +93,11 @@ button{
 
 <div class="container">
 
-<h1>gerador.vernaculando</h1>
+<h1>gerador.vernaculando <span style="font-size:11px; color:#999;">beta</span></h1>
 
 <input
 id="palavra"
-placeholder="palavra  |  palabra  |  word"
+placeholder="palavra | palabra | word"
 maxlength="20"
 >
 
@@ -116,6 +115,10 @@ vernacular!
   <a href="https://instagram.com/vernaculando" target="_blank" class="insta-link">instagram @vernaculando</a>
 </div>
 
+<div style="text-align:center; margin-top:40px; font-size:11px; color:#bbb;">
+  feito por Vinicius Guimarães & DeepSeek
+</div>
+
 </div>
 
 <script>
@@ -127,16 +130,13 @@ const RSS_URL = "https://rss.app/feeds/v1.1/4aUmbnZaAmP38RRZ.json";
 let letrasCompletas = {};
 
 async function carregarLetras() {
-  // 1. Carrega letras.json (base histórica)
   const respLocal = await fetch("/letras.json");
   const dadosLocais = await respLocal.json();
   
-  // 2. Carrega RSS (posts novos)
   try {
     const respRSS = await fetch(RSS_URL);
     const dadosRSS = await respRSS.json();
     
-    // Extrai hashtags do RSS
     for (const item of dadosRSS.items || []) {
       const legenda = (item.content_text || item.title || "").toUpperCase();
       const matchLetra = legenda.match(/#[A-Z0-9]\b/gi);
@@ -144,11 +144,10 @@ async function carregarLetras() {
       if (matchLetra) {
         for (const tag of matchLetra) {
           const letra = tag.replace("#", "").toUpperCase();
-          // Pula se tiver mais de 1 caractere
           if (letra.length !== 1) continue;
           const imagem = item.image || item.enclosure?.url || "";
           
-          if (imagem && letra.length === 1) {
+          if (imagem) {
             if (!dadosLocais[letra]) dadosLocais[letra] = [];
             if (!dadosLocais[letra].includes(imagem)) {
               dadosLocais[letra].push(imagem);
@@ -162,60 +161,58 @@ async function carregarLetras() {
   }
   
   letrasCompletas = dadosLocais;
-  console.log("Letras carregadas:", Object.keys(letrasCompletas).length);
 }
 
 // ========== FUNÇÃO PRINCIPAL ==========
 function compor() {
-  const palavra = document.getElementById("palavra").value.toUpperCase();
+  const palavraInput = document.getElementById("palavra").value;
   const resultado = document.getElementById("resultado");
   const erro = document.getElementById("erro");
   
   resultado.innerHTML = "";
   erro.innerHTML = "";
   
-  if (!palavra) {
-    erro.innerHTML = "Digite uma palavra!<br>Escribe una palabra!<br>Type a word!";
+  if (!palavraInput) {
+    erro.innerHTML = "digite uma palavra<br>escribe una palabra<br>type a word";
     document.getElementById("link-instagram").style.display = "none";
     return;
   }
-
-  // Mapa de acentos e símbolos
-const mapa = {
-  "Á": "a_acute", "À": "a_acute", "Â": "a_acute", "Ã": "a_tilde",
-  "É": "e_acute", "Ê": "e_acute",
-  "Í": "i_acute",
-  "Ó": "o_acute", "Ô": "o_acute", "Õ": "o_tilde",
-  "Ú": "u_acute",
-  "Ç": "c_cedilha",
-  "@": "arroba",
-  "&": "ampersand"
-};
-
-const palavra = document.getElementById("palavra").value
-  .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
-  .toUpperCase();
   
-  for (const letra of palavra) {
-    const chave = mapa[letra] || letra;
+  // Mapa de acentos e símbolos
+  const mapa = {
+    "Á": "a_acute", "À": "a_acute", "Â": "a_acute", "Ã": "a_tilde",
+    "É": "e_acute", "Ê": "e_acute",
+    "Í": "i_acute",
+    "Ó": "o_acute", "Ô": "o_acute", "Õ": "o_tilde",
+    "Ú": "u_acute",
+    "Ç": "c_cedilha",
+    "@": "arroba",
+    "&": "ampersand"
+  };
+  
+  // Converte para array de caracteres (mantendo acentos)
+  const caracteres = palavraInput.split("");
+  
+  for (const char of caracteres) {
+    const charUpper = char.toUpperCase();
+    // Verifica se é um caractere mapeado (acento/símbolo)
+    const chave = mapa[charUpper] || charUpper;
     const opcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || [];
     
     if (opcoes && opcoes.length > 0) {
       const img = document.createElement("img");
-      // Escolhe aleatoriamente
       img.src = opcoes[Math.floor(Math.random() * opcoes.length)];
-      img.alt = letra;
-      img.title = `Letra ${letra}`;
+      img.alt = char;
+      img.title = `Letra ${char}`;
       resultado.appendChild(img);
     } else {
       const span = document.createElement("span");
-      span.style.cssText = "width:160px;height:160px;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:40px;color:#ccc;";
-      span.innerHTML = letra;
+      span.style.cssText = "width:clamp(80px, 20vw, 160px);height:clamp(80px, 20vw, 160px);border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:clamp(20px, 5vw, 40px);color:#ccc;";
+      span.innerHTML = char;
       resultado.appendChild(span);
     }
   }
   
-  // Mostra o link do Instagram
   var link = document.getElementById("link-instagram");
   if (link) link.style.display = "block";
 }
@@ -223,7 +220,6 @@ const palavra = document.getElementById("palavra").value
 // ========== INICIA ==========
 carregarLetras();
 
-// Permite apertar Enter para gerar
 document.getElementById("palavra").addEventListener("keydown", function(e) {
   if (e.key === "Enter") compor();
 });
