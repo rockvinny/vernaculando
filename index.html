@@ -179,6 +179,71 @@ function compor() {
     return;
   }
   
+  const mapa = {
+    "Á": "a_acute", "À": "a", "Â": "a", "Ã": "a_tilde", "Ä": "a",
+    "É": "e_acute", "Ê": "e", "Ë": "e",
+    "Í": "i_acute", "Ï": "i",
+    "Ó": "o_acute", "Ô": "o", "Õ": "o", "Ö": "o",
+    "Ú": "u_acute", "Ü": "u",
+    "Ç": "c_cedilha",
+    "Ñ": "n",
+    "@": "arroba",
+    "&": "ampersand"
+  };
+  
+  const caracteres = palavraInput.split("");
+  
+  // Conta quantas vezes cada letra aparece e prepara cópias das opções
+  const contador = {};
+  const opcoesDisponiveis = {};
+  
+  for (const char of caracteres) {
+    const charUpper = char.toUpperCase();
+    const chave = mapa[charUpper] || charUpper.toLowerCase();
+    
+    if (!contador[chave]) {
+      contador[chave] = 0;
+      const todasOpcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || letrasCompletas[chave.toUpperCase()] || [];
+      opcoesDisponiveis[chave] = [...todasOpcoes]; // cópia do array
+    }
+    contador[chave]++;
+  }
+  
+  // Embaralha as opções disponíveis
+  for (const chave in opcoesDisponiveis) {
+    const arr = opcoesDisponiveis[chave];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+  
+  // Monta o resultado
+  for (const char of caracteres) {
+    const charUpper = char.toUpperCase();
+    const chave = mapa[charUpper] || charUpper.toLowerCase();
+    const opcoes = opcoesDisponiveis[chave];
+    
+    if (opcoes && opcoes.length > 0) {
+      const img = document.createElement("img");
+      // Pega a primeira disponível e remove (sem repetir)
+      const imagem = opcoes.shift();
+      img.src = imagem;
+      img.alt = char;
+      img.title = `Letra ${char}`;
+      resultado.appendChild(img);
+    } else {
+      const span = document.createElement("span");
+      span.style.cssText = "width:clamp(80px, 20vw, 160px);height:clamp(80px, 20vw, 160px);border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:clamp(20px, 5vw, 40px);color:#ccc;";
+      span.innerHTML = char;
+      resultado.appendChild(span);
+    }
+  }
+  
+  var link = document.getElementById("link-instagram");
+  if (link) link.style.display = "block";
+}
+  
   // Mapa de acentos e símbolos (PT e ES)
   const mapa = {
     "Á": "a_acute", "À": "a", "Â": "a", "Ã": "a_tilde", "Ä": "a",
