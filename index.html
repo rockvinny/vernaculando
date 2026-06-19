@@ -51,11 +51,6 @@ button{
   cursor:pointer;
 }
 
-button.download{
-  background:#fff;
-  color:#000;
-}
-
 .resultado{
   margin-top:30px;
   display:flex;
@@ -93,9 +88,18 @@ button.download{
   background:#ffff00;
 }
 
-.botoes{
-  display:none;
-  margin-top:15px;
+.download-link{
+  font-size:13px;
+  font-weight:400;
+  color:#000;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background 0.2s;
+  padding:2px 4px;
+}
+
+.download-link:hover{
+  background:#ffff00;
 }
 </style>
 
@@ -120,11 +124,16 @@ vernacular!
 
 <div class="resultado" id="resultado"></div>
 
-<div class="botoes" id="botoes">
-  <button onclick="baixar()" class="download">baixar</button>
-</div>
-
 <div class="erro" id="erro"></div>
+
+<div id="download-area" style="text-align:center; margin-top:20px; display:none;">
+  <span style="font-size:13px;">download: </span>
+  <a onclick="baixar(60)" class="download-link">60px</a>
+  <span style="font-size:13px;"> | </span>
+  <a onclick="baixar(100)" class="download-link">100px</a>
+  <span style="font-size:13px;"> | </span>
+  <a onclick="baixar(150)" class="download-link">150px</a>
+</div>
 
 <div id="link-instagram" style="text-align:center; display:none;">
   <a href="https://instagram.com/vernaculando" target="_blank" class="insta-link">instagram @vernaculando</a>
@@ -190,7 +199,7 @@ function compor() {
   if (!palavraInput) {
     erro.innerHTML = "digite uma palavra<br>escribe una palabra<br>type a word";
     document.getElementById("link-instagram").style.display = "none";
-    document.getElementById("botoes").style.display = "none";
+    document.getElementById("download-area").style.display = "none";
     return;
   }
   
@@ -262,19 +271,29 @@ function compor() {
   }
   
   document.getElementById("link-instagram").style.display = "block";
-  document.getElementById("botoes").style.display = "block";
+  document.getElementById("download-area").style.display = "block";
 }
 
 // ========== DOWNLOAD ==========
-function baixar() {
+function baixar(tamanho) {
   const resultado = document.getElementById("resultado");
   
-  // Container flex para as imagens
   const container = document.createElement("div");
   container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center;";
   container.innerHTML = resultado.innerHTML;
   
-  // Wrapper com fundo branco e crédito
+  const imgs = container.querySelectorAll("img");
+  imgs.forEach(img => {
+    img.style.width = tamanho + "px";
+    img.style.height = tamanho + "px";
+  });
+  
+  const spans = container.querySelectorAll("span");
+  spans.forEach(span => {
+    span.style.width = tamanho + "px";
+    span.style.height = tamanho + "px";
+  });
+  
   const wrapper = document.createElement("div");
   wrapper.style.cssText = "display:inline-block; background:#fff; padding:10px; text-align:center;";
   wrapper.appendChild(container);
@@ -286,10 +305,10 @@ function baixar() {
   
   document.body.appendChild(wrapper);
   
-  html2canvas(wrapper, { backgroundColor: "#fff", scale: 2 }).then(canvas => {
+  html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
     document.body.removeChild(wrapper);
     const link = document.createElement("a");
-    link.download = "vernaculando.png";
+    link.download = "vernaculando_" + tamanho + ".png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
