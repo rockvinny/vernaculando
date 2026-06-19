@@ -297,7 +297,7 @@ function sticker() {
   html2canvas(wrapper, { backgroundColor: null, scale: 1 }).then(canvas => {
     document.body.removeChild(wrapper);
     const link = document.createElement("a");
-    link.download = "vernaculando_sticker.png";
+    link.download = "vernaculando_" + palavra + "_sticker.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
@@ -340,7 +340,7 @@ function post() {
   html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
     document.body.removeChild(wrapper);
     const link = document.createElement("a");
-    link.download = "vernaculando_post.png";
+    link.download = "vernaculando_" + palavra + "_post.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
@@ -383,7 +383,7 @@ function story() {
   html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
     document.body.removeChild(wrapper);
     const link = document.createElement("a");
-    link.download = "vernaculando_story.png";
+    link.download = "vernaculando_" + palavra + "_story.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
