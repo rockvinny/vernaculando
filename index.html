@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>gerador.vernaculando</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
 body{
@@ -50,6 +51,11 @@ button{
   cursor:pointer;
 }
 
+button.download{
+  background:#fff;
+  color:#000;
+}
+
 .resultado{
   margin-top:30px;
   display:flex;
@@ -86,6 +92,11 @@ button{
 .insta-link:hover{
   background:#ffff00;
 }
+
+.botoes{
+  display:none;
+  margin-top:15px;
+}
 </style>
 
 </head>
@@ -108,6 +119,10 @@ vernacular!
 </button>
 
 <div class="resultado" id="resultado"></div>
+
+<div class="botoes" id="botoes">
+  <button onclick="baixar()" class="download">baixar</button>
+</div>
 
 <div class="erro" id="erro"></div>
 
@@ -161,7 +176,6 @@ async function carregarLetras() {
   }
   
   letrasCompletas = dadosLocais;
-  console.log("Letras carregadas:", Object.keys(letrasCompletas).length);
 }
 
 // ========== FUNÇÃO PRINCIPAL ==========
@@ -176,6 +190,7 @@ function compor() {
   if (!palavraInput) {
     erro.innerHTML = "digite uma palavra<br>escribe una palabra<br>type a word";
     document.getElementById("link-instagram").style.display = "none";
+    document.getElementById("botoes").style.display = "none";
     return;
   }
   
@@ -193,7 +208,6 @@ function compor() {
   
   const caracteres = palavraInput.split("");
   
-  // Conta quantas vezes cada letra aparece e prepara cópias das opções
   const contador = {};
   const opcoesDisponiveis = {};
   
@@ -209,7 +223,6 @@ function compor() {
     contador[chave]++;
   }
   
-  // Embaralha as opções disponíveis
   for (const chave in opcoesDisponiveis) {
     const arr = opcoesDisponiveis[chave];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -218,13 +231,11 @@ function compor() {
     }
   }
   
-  // Monta o resultado
   for (const char of caracteres) {
     const charUpper = char.toUpperCase();
     const chave = mapa[charUpper] || charUpper.toLowerCase();
     let opcoes = opcoesDisponiveis[chave];
     
-    // Se acabou as opções, recarrega e embaralha de novo
     if (!opcoes || opcoes.length === 0) {
       const todasOpcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || letrasCompletas[chave.toUpperCase()] || [];
       opcoes = [...todasOpcoes];
@@ -250,8 +261,34 @@ function compor() {
     }
   }
   
-  var link = document.getElementById("link-instagram");
-  if (link) link.style.display = "block";
+  document.getElementById("link-instagram").style.display = "block";
+  document.getElementById("botoes").style.display = "block";
+}
+
+// ========== DOWNLOAD ==========
+function baixar() {
+  const resultado = document.getElementById("resultado");
+  
+  // Cria um container temporário com fundo branco e crédito
+  const container = document.createElement("div");
+  container.style.cssText = "display:inline-block; background:#fff; padding:10px; text-align:center;";
+  container.innerHTML = resultado.innerHTML;
+  
+  // Adiciona crédito
+  const credito = document.createElement("div");
+  credito.style.cssText = "font-family:Arial,sans-serif; font-size:11px; color:#999; margin-top:8px;";
+  credito.innerText = "@vernaculando";
+  container.appendChild(credito);
+  
+  document.body.appendChild(container);
+  
+  html2canvas(container, { backgroundColor: "#fff", scale: 2 }).then(canvas => {
+    document.body.removeChild(container);
+    const link = document.createElement("a");
+    link.download = "vernaculando.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
 }
 
 // ========== INICIA ==========
