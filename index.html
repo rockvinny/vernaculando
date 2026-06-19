@@ -306,6 +306,11 @@ function sticker() {
 // ========== POST (1080x1080, moldura branca, com crédito) ==========
 function post() {
   const resultado = document.getElementById("resultado");
+  const numLetras = resultado.children.length;
+  
+  const margem = 120;
+  const larguraDisponivel = 1080 - margem;
+  const tamanhoLetra = Math.min(200, Math.floor(larguraDisponivel / numLetras));
   
   const container = document.createElement("div");
   container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
@@ -313,8 +318,8 @@ function post() {
   
   const imgs = container.querySelectorAll("img");
   imgs.forEach(img => {
-    img.style.width = "140px";
-    img.style.height = "140px";
+    img.style.width = tamanhoLetra + "px";
+    img.style.height = tamanhoLetra + "px";
   });
   
   const inner = document.createElement("div");
@@ -322,12 +327,12 @@ function post() {
   inner.appendChild(container);
   
   const credito = document.createElement("div");
-  credito.style.cssText = "font-family:Arial,sans-serif; font-size:24px; color:#999; margin-top:30px;";
+  credito.style.cssText = "font-family:Arial,sans-serif; font-size:24px; color:#999; margin-top:40px;";
   credito.innerText = "gerador.vernaculando";
   inner.appendChild(credito);
   
   const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1080px; background:#fff;";
+  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1080px; background:#fff; padding:0 60px; box-sizing:border-box;";
   wrapper.appendChild(inner);
   
   document.body.appendChild(wrapper);
@@ -344,6 +349,11 @@ function post() {
 // ========== STORY (1080x1920, moldura branca, com crédito) ==========
 function story() {
   const resultado = document.getElementById("resultado");
+  const numLetras = resultado.children.length;
+  
+  const margem = 120;
+  const larguraDisponivel = 1080 - margem;
+  const tamanhoLetra = Math.min(220, Math.floor(larguraDisponivel / numLetras));
   
   const container = document.createElement("div");
   container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
@@ -351,8 +361,8 @@ function story() {
   
   const imgs = container.querySelectorAll("img");
   imgs.forEach(img => {
-    img.style.width = "160px";
-    img.style.height = "160px";
+    img.style.width = tamanhoLetra + "px";
+    img.style.height = tamanhoLetra + "px";
   });
   
   const inner = document.createElement("div");
@@ -360,12 +370,12 @@ function story() {
   inner.appendChild(container);
   
   const credito = document.createElement("div");
-  credito.style.cssText = "font-family:Arial,sans-serif; font-size:28px; color:#999; margin-top:40px;";
+  credito.style.cssText = "font-family:Arial,sans-serif; font-size:28px; color:#999; margin-top:60px;";
   credito.innerText = "gerador.vernaculando";
   inner.appendChild(credito);
   
   const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1920px; background:#fff;";
+  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1920px; background:#fff; padding:0 60px; box-sizing:border-box;";
   wrapper.appendChild(inner);
   
   document.body.appendChild(wrapper);
@@ -389,4 +399,4 @@ document.getElementById("palavra").addEventListener("keydown", function(e) {
 </script>
 
 </body>
-</html>
+  </html>
