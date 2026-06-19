@@ -128,11 +128,11 @@ vernacular!
 
 <div id="download-area" style="text-align:center; margin-top:20px; display:none;">
   <span style="font-size:13px;">download: </span>
-  <a onclick="baixar(60)" class="download-link">60px</a>
+  <a onclick="sticker()" class="download-link">sticker</a>
   <span style="font-size:13px;"> | </span>
-  <a onclick="baixar(100)" class="download-link">100px</a>
+  <a onclick="post()" class="download-link">post</a>
   <span style="font-size:13px;"> | </span>
-  <a onclick="baixar(150)" class="download-link">150px</a>
+  <a onclick="story()" class="download-link">story</a>
 </div>
 
 <div id="link-instagram" style="text-align:center; display:none;">
@@ -274,41 +274,106 @@ function compor() {
   document.getElementById("download-area").style.display = "block";
 }
 
-// ========== DOWNLOAD ==========
-function baixar(tamanho) {
+// ========== STICKER (512x512, transparente, sem crédito) ==========
+function sticker() {
   const resultado = document.getElementById("resultado");
   
   const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center;";
+  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
   container.innerHTML = resultado.innerHTML;
   
   const imgs = container.querySelectorAll("img");
   imgs.forEach(img => {
-    img.style.width = tamanho + "px";
-    img.style.height = tamanho + "px";
-  });
-  
-  const spans = container.querySelectorAll("span");
-  spans.forEach(span => {
-    span.style.width = tamanho + "px";
-    span.style.height = tamanho + "px";
+    img.style.width = "100px";
+    img.style.height = "100px";
   });
   
   const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:inline-block; background:#fff; padding:10px; text-align:center;";
+  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:512px; height:512px; background:transparent;";
   wrapper.appendChild(container);
   
+  document.body.appendChild(wrapper);
+  
+  html2canvas(wrapper, { backgroundColor: null, scale: 1 }).then(canvas => {
+    document.body.removeChild(wrapper);
+    const link = document.createElement("a");
+    link.download = "vernaculando_sticker.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+
+// ========== POST (1080x1080, moldura branca, com crédito) ==========
+function post() {
+  const resultado = document.getElementById("resultado");
+  
+  const container = document.createElement("div");
+  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
+  container.innerHTML = resultado.innerHTML;
+  
+  const imgs = container.querySelectorAll("img");
+  imgs.forEach(img => {
+    img.style.width = "140px";
+    img.style.height = "140px";
+  });
+  
+  const inner = document.createElement("div");
+  inner.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center;";
+  inner.appendChild(container);
+  
   const credito = document.createElement("div");
-  credito.style.cssText = "font-family:Arial,sans-serif; font-size:11px; color:#999; margin-top:8px;";
-  credito.innerText = "@vernaculando";
-  wrapper.appendChild(credito);
+  credito.style.cssText = "font-family:Arial,sans-serif; font-size:24px; color:#999; margin-top:30px;";
+  credito.innerText = "gerador.vernaculando";
+  inner.appendChild(credito);
+  
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1080px; background:#fff;";
+  wrapper.appendChild(inner);
   
   document.body.appendChild(wrapper);
   
   html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
     document.body.removeChild(wrapper);
     const link = document.createElement("a");
-    link.download = "vernaculando_" + tamanho + ".png";
+    link.download = "vernaculando_post.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+
+// ========== STORY (1080x1920, moldura branca, com crédito) ==========
+function story() {
+  const resultado = document.getElementById("resultado");
+  
+  const container = document.createElement("div");
+  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
+  container.innerHTML = resultado.innerHTML;
+  
+  const imgs = container.querySelectorAll("img");
+  imgs.forEach(img => {
+    img.style.width = "160px";
+    img.style.height = "160px";
+  });
+  
+  const inner = document.createElement("div");
+  inner.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center;";
+  inner.appendChild(container);
+  
+  const credito = document.createElement("div");
+  credito.style.cssText = "font-family:Arial,sans-serif; font-size:28px; color:#999; margin-top:40px;";
+  credito.innerText = "gerador.vernaculando";
+  inner.appendChild(credito);
+  
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1920px; background:#fff;";
+  wrapper.appendChild(inner);
+  
+  document.body.appendChild(wrapper);
+  
+  html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
+    document.body.removeChild(wrapper);
+    const link = document.createElement("a");
+    link.download = "vernaculando_story.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
