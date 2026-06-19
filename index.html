@@ -269,21 +269,25 @@ function compor() {
 function baixar() {
   const resultado = document.getElementById("resultado");
   
-  // Cria um container temporário com fundo branco e crédito
+  // Container flex para as imagens
   const container = document.createElement("div");
-  container.style.cssText = "display:inline-block; background:#fff; padding:10px; text-align:center;";
+  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center;";
   container.innerHTML = resultado.innerHTML;
   
-  // Adiciona crédito
+  // Wrapper com fundo branco e crédito
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "display:inline-block; background:#fff; padding:10px; text-align:center;";
+  wrapper.appendChild(container);
+  
   const credito = document.createElement("div");
   credito.style.cssText = "font-family:Arial,sans-serif; font-size:11px; color:#999; margin-top:8px;";
   credito.innerText = "@vernaculando";
-  container.appendChild(credito);
+  wrapper.appendChild(credito);
   
-  document.body.appendChild(container);
+  document.body.appendChild(wrapper);
   
-  html2canvas(container, { backgroundColor: "#fff", scale: 2 }).then(canvas => {
-    document.body.removeChild(container);
+  html2canvas(wrapper, { backgroundColor: "#fff", scale: 2 }).then(canvas => {
+    document.body.removeChild(wrapper);
     const link = document.createElement("a");
     link.download = "vernaculando.png";
     link.href = canvas.toDataURL("image/png");
