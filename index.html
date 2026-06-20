@@ -55,9 +55,12 @@ button{
   margin-top:30px;
   display:flex;
   flex-wrap:nowrap;
-  justify-content:center;
+  justify-content:flex-start;
   overflow-x:auto;
   gap:0px;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  overscroll-behavior-x:contain;
 }
 
 .resultado img{
@@ -278,15 +281,22 @@ function compor() {
 function sticker() {
   const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
+  const numLetras = resultado.children.length;
+  
+  const tamanhoLetra = Math.min(100, Math.floor(400 / numLetras));
   
   const container = document.createElement("div");
   container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
-  container.innerHTML = resultado.innerHTML;
   
-  const imgs = container.querySelectorAll("img");
-  imgs.forEach(img => {
-    img.style.width = "100px";
-    img.style.height = "100px";
+  const imgsOriginais = resultado.querySelectorAll("img");
+  imgsOriginais.forEach(img => {
+    const novaImg = document.createElement("img");
+    novaImg.src = img.src;
+    novaImg.alt = img.alt;
+    novaImg.style.width = tamanhoLetra + "px";
+    novaImg.style.height = tamanhoLetra + "px";
+    novaImg.style.objectFit = "cover";
+    container.appendChild(novaImg);
   });
   
   const wrapper = document.createElement("div");
@@ -304,70 +314,6 @@ function sticker() {
   });
 }
 
-// ========== POST (1080x1080, moldura branca, com crédito) ==========
-function post() {
-  const palavra = document.getElementById("palavra").value.toUpperCase();
-  const resultado = document.getElementById("resultado");
-  const numLetras = resultado.children.length;
-  
-  const margem = 120;
-  const larguraDisponivel = 1080 - margem;
-  const tamanhoLetra = Math.min(200, Math.floor(larguraDisponivel / numLetras));
-  
-  const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
-  container.innerHTML = resultado.innerHTML;
-  
-  const imgs = container.querySelectorAll("img");
-  imgs.forEach(img => {
-    img.style.width = tamanhoLetra + "px";
-    img.style.height = tamanhoLetra + "px";
-  });
-  
-  const inner = document.createElement("div");
-  inner.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center;";
-  inner.appendChild(container);
-  
-  const credito = document.createElement("div");
-  credito.style.cssText = "font-family:'Rubik', sans-serif; font-size:28px; color:#999; margin-top:40px;";
-  credito.innerText = "gerador.vernaculando";
-  inner.appendChild(credito);
-  
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1080px; background:#fff; padding:0 60px; box-sizing:border-box;";
-  wrapper.appendChild(inner);
-  
-  document.body.appendChild(wrapper);
-  
-  html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
-    document.body.removeChild(wrapper);
-    const link = document.createElement("a");
-    link.download = "vernaculando_" + palavra + "_post.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
-}
-
-// ========== STORY (1080x1920, moldura branca, com crédito) ==========
-function story() {
-  const palavra = document.getElementById("palavra").value.toUpperCase();
-  const resultado = document.getElementById("resultado");
-  const numLetras = resultado.children.length;
-  
-  const margem = 120;
-  const larguraDisponivel = 1080 - margem;
-  const tamanhoLetra = Math.min(220, Math.floor(larguraDisponivel / numLetras));
-  
-  const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
-  container.innerHTML = resultado.innerHTML;
-  
-  const imgs = container.querySelectorAll("img");
-  imgs.forEach(img => {
-    img.style.width = tamanhoLetra + "px";
-    img.style.height = tamanhoLetra + "px";
-  });
-  
 // ========== POST (1080x540, moldura branca, com crédito) ==========
 function post() {
   const palavra = document.getElementById("palavra").value.toUpperCase();
@@ -474,4 +420,4 @@ document.getElementById("palavra").addEventListener("keydown", function(e) {
 </script>
 
 </body>
-  </html>
+</html>
