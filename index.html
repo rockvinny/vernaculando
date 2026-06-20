@@ -276,6 +276,7 @@ function compor() {
 
 // ========== STICKER (512x512, transparente, sem crédito) ==========
 function sticker() {
+  const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
   
   const container = document.createElement("div");
@@ -305,6 +306,7 @@ function sticker() {
 
 // ========== POST (1080x1080, moldura branca, com crédito) ==========
 function post() {
+  const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
   const numLetras = resultado.children.length;
   
@@ -348,6 +350,7 @@ function post() {
 
 // ========== STORY (1080x1920, moldura branca, com crédito) ==========
 function story() {
+  const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
   const numLetras = resultado.children.length;
   
