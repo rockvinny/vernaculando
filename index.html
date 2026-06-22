@@ -173,7 +173,7 @@ async function carregarLetras() {
         for (const tag of matchLetra) {
           const letra = tag.replace("#", "").toUpperCase();
           if (letra.length !== 1) continue;
-          const imagem = item.image || item.enclosure?.url || "";
+          const imagem = (item.image || item.enclosure?.url || "").replace(/\.heic\b/gi, ".jpg");
           
      if (imagem) {
           const chave = letra.toLowerCase();
