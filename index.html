@@ -167,7 +167,7 @@ async function carregarLetras() {
     
     for (const item of dadosRSS.items || []) {
       const legenda = (item.content_text || item.title || "").toUpperCase();
-      const matchLetra = legenda.match(/#[A-Z0-9]\b/gi);
+      const matchLetra = legenda.match(/#[A-Z0-9](?![A-Z0-9])/gi);
 
       if (matchLetra) {
         for (const tag of matchLetra) {
