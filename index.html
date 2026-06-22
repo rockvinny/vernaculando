@@ -173,15 +173,16 @@ async function carregarLetras() {
         for (const tag of matchLetra) {
           const letra = tag.replace("#", "").toUpperCase();
           if (letra.length !== 1) continue;
-          const imagem = (item.image || item.enclosure?.url || "").replace(/\.heic\b/gi, ".jpg");
+          const imagemOriginal = item.image || item.enclosure?.url || "";
           
-     if (imagem) {
-          const chave = letra.toLowerCase();
-          if (!dadosLocais[chave]) dadosLocais[chave] = [];
-          if (!dadosLocais[chave].includes(imagem)) {
-          dadosLocais[chave].push(imagem);
-           }
-         }
+          if (imagemOriginal) {
+            const chave = letra.toLowerCase();
+            if (!dadosLocais[chave]) dadosLocais[chave] = [];
+            const imagemProxy = "https://images.weserv.nl/?url=" + encodeURIComponent(imagemOriginal);
+            if (!dadosLocais[chave].includes(imagemProxy)) {
+              dadosLocais[chave].push(imagemProxy);
+            }
+          }
         }
       }
     }
