@@ -302,6 +302,7 @@ function sticker() {
   const imgsOriginais = resultado.querySelectorAll("img");
   imgsOriginais.forEach(img => {
     const novaImg = document.createElement("img");
+    novaImg.crossOrigin = "anonymous";
     novaImg.src = img.src;
     novaImg.alt = img.alt;
     novaImg.style.width = tamanhoLetra + "px";
@@ -341,6 +342,7 @@ function post() {
   const imgsOriginais = resultado.querySelectorAll("img");
   imgsOriginais.forEach(img => {
     const novaImg = document.createElement("img");
+    novaImg.crossOrigin = "anonymous";
     novaImg.src = img.src;
     novaImg.alt = img.alt;
     novaImg.style.width = tamanhoLetra + "px";
@@ -389,6 +391,7 @@ function story() {
   const imgsOriginais = resultado.querySelectorAll("img");
   imgsOriginais.forEach(img => {
     const novaImg = document.createElement("img");
+    novaImg.crossOrigin = "anonymous";
     novaImg.src = img.src;
     novaImg.alt = img.alt;
     novaImg.style.width = tamanhoLetra + "px";
