@@ -271,8 +271,18 @@ function compor() {
       resultado.appendChild(img);
     } else {
       const span = document.createElement("span");
-      span.style.cssText = "width:clamp(80px, 20vw, 160px);height:clamp(80px, 20vw, 160px);background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:clamp(50px, 14vw, 120px);color:#ccc;font-weight:700;font-family:'Rubik',sans-serif;";
-      span.innerHTML = char;
+      span.style.cssText = "width:clamp(80px, 20vw, 160px);height:clamp(80px, 20vw, 160px);background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Rubik',sans-serif;position:relative;";
+      
+      const letraGrande = document.createElement("span");
+      letraGrande.style.cssText = "font-size:clamp(60px, 16vw, 130px);color:#ddd;font-weight:900;line-height:1;";
+      letraGrande.innerHTML = char;
+      span.appendChild(letraGrande);
+      
+      const etiqueta = document.createElement("span");
+      etiqueta.style.cssText = "font-size:clamp(7px, 2vw, 10px);color:#bbb;font-weight:400;letter-spacing:.05em;margin-top:2px;";
+      etiqueta.innerHTML = "em breve";
+      span.appendChild(etiqueta);
+      
       resultado.appendChild(span);
     }
   }
