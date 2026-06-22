@@ -175,12 +175,13 @@ async function carregarLetras() {
           if (letra.length !== 1) continue;
           const imagem = item.image || item.enclosure?.url || "";
           
-          if (imagem) {
-            if (!dadosLocais[letra]) dadosLocais[letra] = [];
-            if (!dadosLocais[letra].includes(imagem)) {
-              dadosLocais[letra].push(imagem);
-            }
-          }
+     if (imagem) {
+          const chave = letra.toLowerCase();
+          if (!dadosLocais[chave]) dadosLocais[chave] = [];
+          if (!dadosLocais[chave].includes(imagem)) {
+          dadosLocais[chave].push(imagem);
+           }
+         }
         }
       }
     }
