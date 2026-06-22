@@ -292,136 +292,175 @@ function compor() {
 function sticker() {
   const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
-  const numLetras = resultado.children.length;
+  const imgs = resultado.querySelectorAll("img");
+  const numLetras = imgs.length;
   
   const tamanhoLetra = Math.min(100, Math.floor(400 / numLetras));
   
-  const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
   
-  const imgsOriginais = resultado.querySelectorAll("img");
-  imgsOriginais.forEach(img => {
-    const novaImg = document.createElement("img");
+  // Fundo transparente
+  ctx.clearRect(0, 0, 512, 512);
+  
+  // Calcula posição inicial para centralizar
+  const larguraTotal = numLetras * tamanhoLetra;
+  let x = (512 - larguraTotal) / 2;
+  const y = (512 - tamanhoLetra) / 2;
+  
+  // Desenha cada imagem
+  let carregadas = 0;
+  imgs.forEach((img, i) => {
+    const novaImg = new Image();
     novaImg.crossOrigin = "anonymous";
+    novaImg.onload = function() {
+      ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
+    novaImg.onerror = function() {
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
     novaImg.src = img.src;
-    novaImg.alt = img.alt;
-    novaImg.style.width = tamanhoLetra + "px";
-    novaImg.style.height = tamanhoLetra + "px";
-    novaImg.style.objectFit = "cover";
-    container.appendChild(novaImg);
   });
   
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:512px; height:512px; background:transparent;";
-  wrapper.appendChild(container);
-  
-  document.body.appendChild(wrapper);
-  
-  html2canvas(wrapper, { backgroundColor: null, scale: 1 }).then(canvas => {
-    document.body.removeChild(wrapper);
-    const link = document.createElement("a");
-    link.download = "vernaculando_" + palavra + "_sticker.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
+  function finalizar() {
+    canvas.toBlob(function(blob) {
+      const link = document.createElement("a");
+      link.download = "vernaculando_" + palavra + "_sticker.png";
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    });
+  }
 }
 
 // ========== POST (1080x1080, moldura branca, com crédito) ==========
 function post() {
   const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
-  const numLetras = resultado.children.length;
+  const imgs = resultado.querySelectorAll("img");
+  const numLetras = imgs.length;
   
   const margem = 120;
   const larguraDisponivel = 1080 - margem;
   const tamanhoLetra = Math.min(800, Math.floor(larguraDisponivel / numLetras));
   
-  const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1080;
+  const ctx = canvas.getContext("2d");
   
-  const imgsOriginais = resultado.querySelectorAll("img");
-  imgsOriginais.forEach(img => {
-    const novaImg = document.createElement("img");
+  // Fundo branco
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, 1080, 1080);
+  
+  // Crédito
+  ctx.fillStyle = "#999";
+  ctx.font = "28px 'Rubik', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("gerador.vernaculando", 540, 1040);
+  
+  // Posição das imagens
+  const larguraTotal = numLetras * tamanhoLetra;
+  let x = (1080 - larguraTotal) / 2;
+  const y = (1080 - tamanhoLetra - 80) / 2;
+  
+  let carregadas = 0;
+  imgs.forEach((img, i) => {
+    const novaImg = new Image();
     novaImg.crossOrigin = "anonymous";
+    novaImg.onload = function() {
+      ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
+    novaImg.onerror = function() {
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
     novaImg.src = img.src;
-    novaImg.alt = img.alt;
-    novaImg.style.width = tamanhoLetra + "px";
-    novaImg.style.height = tamanhoLetra + "px";
-    novaImg.style.objectFit = "cover";
-    container.appendChild(novaImg);
   });
   
-  const inner = document.createElement("div");
-  inner.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center;";
-  inner.appendChild(container);
-  
-  const credito = document.createElement("div");
-  credito.style.cssText = "font-family:'Rubik', sans-serif; font-size:28px; color:#999; margin-top:40px;";
-  credito.innerText = "gerador.vernaculando";
-  inner.appendChild(credito);
-  
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1080px; background:#fff; padding:0 60px; box-sizing:border-box;";
-  wrapper.appendChild(inner);
-  
-  document.body.appendChild(wrapper);
-  
-  html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
-    document.body.removeChild(wrapper);
-    const link = document.createElement("a");
-    link.download = "vernaculando_" + palavra + "_post.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
+  function finalizar() {
+    canvas.toBlob(function(blob) {
+      const link = document.createElement("a");
+      link.download = "vernaculando_" + palavra + "_post.png";
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    });
+  }
 }
 
 // ========== STORY (1080x1920, moldura branca, com crédito) ==========
 function story() {
   const palavra = document.getElementById("palavra").value.toUpperCase();
   const resultado = document.getElementById("resultado");
-  const numLetras = resultado.children.length;
+  const imgs = resultado.querySelectorAll("img");
+  const numLetras = imgs.length;
   
   const margem = 120;
   const larguraDisponivel = 1080 - margem;
   const tamanhoLetra = Math.min(800, Math.floor(larguraDisponivel / numLetras));
   
-  const container = document.createElement("div");
-  container.style.cssText = "display:flex; flex-wrap:nowrap; gap:0; justify-content:center; align-items:center;";
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext("2d");
   
-  const imgsOriginais = resultado.querySelectorAll("img");
-  imgsOriginais.forEach(img => {
-    const novaImg = document.createElement("img");
+  // Fundo branco
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, 1080, 1920);
+  
+  // Crédito
+  ctx.fillStyle = "#999";
+  ctx.font = "28px 'Rubik', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("gerador.vernaculando", 540, 1880);
+  
+  // Posição das imagens
+  const larguraTotal = numLetras * tamanhoLetra;
+  let x = (1080 - larguraTotal) / 2;
+  const y = (1920 - tamanhoLetra - 80) / 2;
+  
+  let carregadas = 0;
+  imgs.forEach((img, i) => {
+    const novaImg = new Image();
     novaImg.crossOrigin = "anonymous";
+    novaImg.onload = function() {
+      ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
+    novaImg.onerror = function() {
+      carregadas++;
+      if (carregadas === numLetras) {
+        finalizar();
+      }
+    };
     novaImg.src = img.src;
-    novaImg.alt = img.alt;
-    novaImg.style.width = tamanhoLetra + "px";
-    novaImg.style.height = tamanhoLetra + "px";
-    novaImg.style.objectFit = "cover";
-    container.appendChild(novaImg);
   });
   
-  const inner = document.createElement("div");
-  inner.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center;";
-  inner.appendChild(container);
-  
-  const credito = document.createElement("div");
-  credito.style.cssText = "font-family:'Rubik', sans-serif; font-size:28px; color:#999; margin-top:60px;";
-  credito.innerText = "gerador.vernaculando";
-  inner.appendChild(credito);
-  
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; justify-content:center; width:1080px; height:1920px; background:#fff; padding:0 60px; box-sizing:border-box;";
-  wrapper.appendChild(inner);
-  
-  document.body.appendChild(wrapper);
-  
-  html2canvas(wrapper, { backgroundColor: "#fff", scale: 1 }).then(canvas => {
-    document.body.removeChild(wrapper);
-    const link = document.createElement("a");
-    link.download = "vernaculando_" + palavra + "_story.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
+  function finalizar() {
+    canvas.toBlob(function(blob) {
+      const link = document.createElement("a");
+      link.download = "vernaculando_" + palavra + "_story.png";
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    });
+  }
 }
 
 // ========== INICIA ==========
