@@ -216,13 +216,13 @@ function compor() {
   }
   
   const mapa = {
-    "Á": "a_acute", "À": "a", "Â": "a", "Ã": "a_tilde", "Ä": "a",
-    "É": "e_acute", "Ê": "e", "Ë": "e",
-    "Í": "i_acute", "Ï": "i",
-    "Ó": "o_acute", "Ô": "o", "Õ": "o", "Ö": "o",
-    "Ú": "u_acute", "Ü": "u",
+    "Á": "a_acute", "Ã": "a_tilde",
+    "É": "e_acute",
+    "Í": "i_acute",
+    "Ó": "o_acute",
+    "Ú": "u_acute",
     "Ç": "c_cedilha",
-    "Ñ": "n",
+    "Ñ": "n_tilde",
     "@": "arroba",
     "&": "ampersand"
   };
@@ -238,7 +238,7 @@ function compor() {
     
     if (!contador[chave]) {
       contador[chave] = 0;
-      const todasOpcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || letrasCompletas[chave.toUpperCase()] || [];
+      const todasOpcoes = letrasCompletas[chave] || [];
       opcoesDisponiveis[chave] = [...todasOpcoes];
     }
     contador[chave]++;
@@ -258,7 +258,7 @@ function compor() {
     let opcoes = opcoesDisponiveis[chave];
     
     if (!opcoes || opcoes.length === 0) {
-      const todasOpcoes = letrasCompletas[chave] || letrasCompletas[chave.toLowerCase()] || letrasCompletas[chave.toUpperCase()] || [];
+      const todasOpcoes = letrasCompletas[chave] || [];
       opcoes = [...todasOpcoes];
       for (let i = opcoes.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -276,15 +276,15 @@ function compor() {
       resultado.appendChild(img);
     } else {
       const span = document.createElement("span");
-      span.style.cssText = "width:clamp(80px, 20vw, 160px);height:clamp(80px, 20vw, 160px);background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-family:'Rubik',sans-serif;position:relative;";
+      span.style.cssText = "width:clamp(50px, 14vw, 120px);height:clamp(50px, 14vw, 120px);background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-family:'Rubik',sans-serif;position:relative;";
       
       const letraGrande = document.createElement("span");
-      letraGrande.style.cssText = "font-size:clamp(70px, 18vw, 140px);color:#ddd;font-weight:900;line-height:1;";
+      letraGrande.style.cssText = "font-size:clamp(40px, 10vw, 90px);color:#ddd;font-weight:900;line-height:1;";
       letraGrande.innerHTML = char.toUpperCase();
       span.appendChild(letraGrande);
       
       const carinha = document.createElement("span");
-      carinha.style.cssText = "position:absolute;top:4px;right:6px;font-size:clamp(14px, 3.5vw, 20px);color:#ccc;font-weight:400;";
+      carinha.style.cssText = "position:absolute;top:3px;right:4px;font-size:clamp(10px, 2.5vw, 14px);color:#ccc;font-weight:400;";
       carinha.innerHTML = ":(";
       span.appendChild(carinha);
       
@@ -317,15 +317,12 @@ function sticker() {
   canvas.height = 512;
   const ctx = canvas.getContext("2d");
   
-  // Fundo transparente
   ctx.clearRect(0, 0, 512, 512);
   
-  // Calcula posição inicial para centralizar
   const larguraTotal = numLetras * tamanhoLetra;
   let x = (512 - larguraTotal) / 2;
   const y = (512 - tamanhoLetra) / 2;
   
-  // Desenha cada imagem
   let carregadas = 0;
   imgs.forEach((img, i) => {
     const novaImg = new Image();
@@ -333,15 +330,11 @@ function sticker() {
     novaImg.onload = function() {
       ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.onerror = function() {
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.src = img.src;
   });
@@ -372,17 +365,14 @@ function post() {
   canvas.height = 1080;
   const ctx = canvas.getContext("2d");
   
-  // Fundo branco
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, 1080, 1080);
   
-  // Crédito
   ctx.fillStyle = "#999";
   ctx.font = "28px 'Rubik', sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("gerador.vernaculando", 540, 1040);
   
-  // Posição das imagens
   const larguraTotal = numLetras * tamanhoLetra;
   let x = (1080 - larguraTotal) / 2;
   const y = (1080 - tamanhoLetra - 80) / 2;
@@ -394,15 +384,11 @@ function post() {
     novaImg.onload = function() {
       ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.onerror = function() {
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.src = img.src;
   });
@@ -433,17 +419,14 @@ function story() {
   canvas.height = 1920;
   const ctx = canvas.getContext("2d");
   
-  // Fundo branco
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, 1080, 1920);
   
-  // Crédito
   ctx.fillStyle = "#999";
   ctx.font = "28px 'Rubik', sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("gerador.vernaculando", 540, 1880);
   
-  // Posição das imagens
   const larguraTotal = numLetras * tamanhoLetra;
   let x = (1080 - larguraTotal) / 2;
   const y = (1920 - tamanhoLetra - 80) / 2;
@@ -455,15 +438,11 @@ function story() {
     novaImg.onload = function() {
       ctx.drawImage(novaImg, x + (i * tamanhoLetra), y, tamanhoLetra, tamanhoLetra);
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.onerror = function() {
       carregadas++;
-      if (carregadas === numLetras) {
-        finalizar();
-      }
+      if (carregadas === numLetras) finalizar();
     };
     novaImg.src = img.src;
   });
