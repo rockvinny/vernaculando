@@ -3,14 +3,17 @@ import os
 import re
 import instaloader
 
+USER = os.environ["INSTAGRAM_USER"]
+PASS = os.environ["INSTAGRAM_PASS"]
+
 L = instaloader.Instaloader()
+L.login(USER, PASS)
+
 perfil = "vernaculando"
 
-# Cria pasta temp se não existir
 if not os.path.exists("temp"):
     os.makedirs("temp")
 
-# Carrega letras.json existente
 with open("letras.json", "r") as f:
     letras = json.load(f)
 
