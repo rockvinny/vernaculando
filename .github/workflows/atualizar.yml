@@ -1,5 +1,36 @@
+name: Atualizar Letras
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v5
+      
+      - name: Instalar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+      
       - name: Rodar script
         env:
           INSTAGRAM_USER: ${{ secrets.INSTAGRAM_USER }}
           INSTAGRAM_PASS: ${{ secrets.INSTAGRAM_PASS }}
         run: python atualizar_letras.py
+      
+      - name: Commit e push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add letras.json public/imagens/
+          git commit -m "🔄 Atualização automática de letras" || echo "Nada novo"
+          git push
